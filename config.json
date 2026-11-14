@@ -1,0 +1,75 @@
+{
+  "port": 7777,
+  "approval": ["powershell", "write_file", "download_file", "browser_click", "browser_fill", "screenshot"],
+  "wakeWords": ["brow", "brou", "brô", "bro", "brown", "brau"],
+  "weather": { "city": "São Paulo", "lat": -23.55, "lon": -46.63 },
+  "providers": {
+    "xkiro": { "type": "openai", "baseURL": "https://api.xkiro.com/v1", "apiKeyEnv": "XKIRO_API_KEY" },
+    "beatapi": { "type": "openai", "baseURL": "https://api.beatapi.io/v1", "apiKeyEnv": "BEATAPI_API_KEY", "maxRetries": 6 },
+    "apinex": { "type": "openai", "baseURL": "https://api.apinex.bond/v1", "apiKeyEnv": "APINEX_API_KEY" },
+    "apinex2": { "type": "openai", "baseURL": "https://api.apinex.bond/v1", "apiKeyEnv": "APINEX_EXTRA_API_KEY" },
+    "oxion": { "type": "openai", "baseURL": "https://www.oxionai.com/v1", "apiKeyEnv": "OXION_API_KEY" },
+    "freellmapi": { "type": "openai", "baseURL": "http://127.0.0.1:31415/v1", "apiKeyEnv": "FREELLMAPI_API_KEY" },
+    "anthropic": { "type": "anthropic", "apiKeyEnv": "ANTHROPIC_API_KEY" },
+    "openai": { "type": "openai", "apiKeyEnv": "OPENAI_API_KEY" },
+    "ollama": { "type": "openai", "baseURL": "http://localhost:11434/v1", "apiKey": "ollama" }
+  },
+  "agents": [
+    {
+      "name": "Assistente",
+      "role": "Assistente de voz: executa, opera, instala, configura e baixa arquivos",
+      "provider": "xkiro",
+      "model": "mistralai/mistral-large-2512",
+      "tools": ["*"],
+      "system": "Você é um assistente de voz que opera o Windows do usuário. Execute o pedido de verdade com as ferramentas (winget para instalar, download_file para baixar, powershell para configurar e abrir apps, screenshot para ver a tela, navegador para sites) e delegue tarefas grandes com ask_agent. Sua resposta será FALADA em voz alta: responda em português, em 1 a 3 frases curtas, sem markdown, sem listas e sem código."
+    },
+    {
+      "name": "Comandante",
+      "role": "Orquestra tarefas, vê a tela e delega aos especialistas",
+      "provider": "xkiro",
+      "model": "mistralai/mistral-large-2512",
+      "tools": ["*"],
+      "system": "Você é o Comandante de um centro de comando no Windows do usuário. Planeje, delegue a especialistas com ask_agent quando fizer sentido, e use as ferramentas para agir de verdade. Para problemas muito difíceis consulte o Estrategista (ele é lento: até 1 resposta por minuto). Responda em português, de forma curta."
+    },
+    {
+      "name": "Estrategista",
+      "role": "Claude Opus 5.5: raciocínio mais forte, para problemas difíceis (lento, 1 pedido/min)",
+      "provider": "beatapi",
+      "model": "claude-opus-5-5",
+      "tools": ["read_file", "list_dir", "fetch_url"],
+      "system": "Você é o estrategista sênior. Analise a fundo, aponte riscos e dê um plano claro e verificável. Use poucas ferramentas: cada chamada sua custa 1 minuto. Responda em português."
+    },
+    {
+      "name": "Programador",
+      "role": "Escreve, roda e corrige programas",
+      "provider": "xkiro",
+      "model": "mistralai/devstral-medium",
+      "tools": ["powershell", "read_file", "write_file", "list_dir", "fetch_url", "download_file", "ask_agent"],
+      "system": "Você é um engenheiro de software sênior. Crie arquivos, rode comandos, teste e corrija até funcionar. Responda em português."
+    },
+    {
+      "name": "Navegador",
+      "role": "Navega em sites, vê a página e preenche formulários",
+      "provider": "xkiro",
+      "model": "mistralai/mistral-medium-3.5",
+      "tools": ["browser_open", "browser_read", "browser_screenshot", "browser_click", "browser_fill", "fetch_url", "ask_agent"],
+      "system": "Você controla um navegador real. Abra páginas, leia o conteúdo (browser_read lista campos e botões com seletores), use browser_screenshot para ver a página, preencha e clique. Nunca envie pagamentos nem senhas sem o usuário pedir explicitamente. Responda em português."
+    },
+    {
+      "name": "Sistema",
+      "role": "Configura, repara e instala no Windows; vê a tela",
+      "provider": "xkiro",
+      "model": "cohere/command-a-plus",
+      "tools": ["powershell", "screenshot", "read_file", "list_dir", "download_file", "ask_agent"],
+      "system": "Você é um administrador de Windows 11. Diagnostique antes de mudar, use winget para instalar, use screenshot para ver o que está na tela, explique o que vai fazer em uma linha. Responda em português."
+    },
+    {
+      "name": "Analista",
+      "role": "Raciocínio passo a passo, pesquisa e revisão",
+      "provider": "xkiro",
+      "model": "cohere/command-a-reasoning",
+      "tools": ["fetch_url", "read_file", "list_dir", "ask_agent"],
+      "system": "Você é um analista rigoroso. Pesquise, compare fontes, revise o trabalho dos outros agentes e aponte erros. Responda em português."
+    }
+  ]
+}

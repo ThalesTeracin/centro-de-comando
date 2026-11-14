@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Centro de Comando</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="dot"></span>Centro de Comando</div>
+    <div class="clock" aria-live="off">
+      <div class="time"><span id="hm">--:--</span><span id="ss">--</span></div>
+      <div class="date" id="date"></div>
+    </div>
+    <div class="right">
+      <div class="weather" id="weather" title="Temperatura atual"><span id="wIcon">·</span><span id="wTemp">--°</span><span id="wCity"></span></div>
+      <button class="icon" id="openCfg" aria-label="Configurações" title="Configurações">⚙</button>
+    </div>
+  </header>
+
+  <aside>
+    <div class="label">Agentes</div>
+    <nav id="agents"></nav>
+    <button class="ghost" id="clear">Limpar conversa</button>
+  </aside>
+
+  <main>
+    <div id="log"></div>
+    <form id="form">
+      <textarea id="input" rows="1" placeholder="Dê uma ordem… (Enter envia, Shift+Enter quebra linha)"></textarea>
+      <button id="send" type="submit">Enviar</button>
+    </form>
+  </main>
+
+  <dialog id="cfg">
+    <form method="dialog" class="cfgbox">
+      <h2>Configurações</h2>
+      <p class="hint">Provedores: <code>"type": "anthropic"</code> ou <code>"openai"</code> (OpenAI, Ollama, LM Studio, OpenRouter, Gemini, Groq…). Chave em <code>apiKey</code> ou variável em <code>apiKeyEnv</code>. Agentes: <code>tools</code> lista ferramentas ou <code>["*"]</code>. <code>approval</code>: ferramentas que pedem sua confirmação.</p>
+      <textarea id="cfgText" spellcheck="false"></textarea>
+      <div class="row"><span id="cfgMsg" class="hint"></span><button value="cancel" class="ghost">Fechar</button><button id="saveCfg" value="default">Salvar</button></div>
+    </form>
+  </dialog>
+  <script src="/app.js"></script>
+</body>
+</html>

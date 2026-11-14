@@ -1,0 +1,15 @@
+{
+  "name": "centro-de-comando",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node selftest.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "openai": "latest",
+    "playwright-core": "latest"
+  }
+}
